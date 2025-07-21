@@ -26,9 +26,9 @@ public class WalkieBehaviour : MonoBehaviour
     void Awake()
     {
         grab = GetComponent<XRGrabInteractable>();
-
-        grab.selectEntered.AddListener(OnGrab);
-        grab.selectExited.AddListener(OnRelease);
+        
+        //grab.selectEntered.AddListener(OnGrab);
+        //grab.selectExited.AddListener(OnRelease);
     }
 
     void Start()
@@ -36,7 +36,7 @@ public class WalkieBehaviour : MonoBehaviour
         // Positionner le talkie à sa position de snap au démarrage
         if (snapOnStart && snapAnchor != null)
         {
-            audioSource.Stop();
+            //audioSource.Stop();
             StartCoroutine(InitialSnap());
         }
     }
@@ -101,36 +101,53 @@ public class WalkieBehaviour : MonoBehaviour
         return false;
     }
 
-    void OnGrab(SelectEnterEventArgs args)
-    {
-        if (audioSource && grabSound)
-        {
-            audioSource.Stop();
-            audioSource.PlayOneShot(grabSound);
-        }
+    // public void OnGrab(SelectEnterEventArgs args)
+    // {
+    //     Debug.Log("OnGrab");
+    //     
+    //     if (audioSource && grabSound)
+    //     {
+    //         //audioSource.Stop();
+    //         //audioSource.PlayOneShot(grabSound);
+    //         audioSource.clip = grabSound;
+    //         audioSource.Play();
+    //     }
+    //
+    //     StopAllCoroutines();
+    //     transform.SetParent(null);
+    //     
+    //     Rigidbody rb = GetComponent<Rigidbody>();
+    //     if (rb) rb.isKinematic = false;
+    //     
+    //     isSnapped = false;
+    // }
 
-        StopAllCoroutines();
-        transform.SetParent(null);
-        
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb) rb.isKinematic = false;
-        
-        isSnapped = false;
+    public void grabw()
+    {
+        audioSource.clip = grabSound;
+        audioSource.Play();
     }
 
-    void OnRelease(SelectExitEventArgs args)
+    public void release()
     {
-        if (audioSource && releaseSound)
-        {
-            audioSource.Stop();
-            audioSource.PlayOneShot(releaseSound);
-        }
-
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb) rb.isKinematic = true;
-        
-        StartCoroutine(SnapBack());
+        audioSource.clip = releaseSound;
+        audioSource.Play();
     }
+
+    // public void OnRelease(SelectExitEventArgs args)
+    // {
+    //     Debug.Log("OnRelease");
+    //     if (audioSource && releaseSound)
+    //     {
+    //         //audioSource.Stop();
+    //         audioSource.PlayOneShot(releaseSound);
+    //     }
+    //
+    //     Rigidbody rb = GetComponent<Rigidbody>();
+    //     if (rb) rb.isKinematic = true;
+    //     
+    //     StartCoroutine(SnapBack());
+    // }
 
     IEnumerator SnapBack()
     {
