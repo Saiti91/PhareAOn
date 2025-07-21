@@ -69,6 +69,17 @@ public class Pedestal : MonoBehaviour
                 AttemptSnap(other.gameObject);
             }
         }
+        else if (currentObject == other.gameObject)
+        {
+            // Maintenir la position si l'objet est toujours dans la zone et pas tenu
+            XRGrabInteractable grab = other.GetComponent<XRGrabInteractable>();
+            if (grab != null && !grab.isSelected)
+            {
+                // Forcer la position pour éviter qu'il glisse
+                other.transform.position = snapPoint.position;
+                other.transform.rotation = snapPoint.rotation;
+            }
+        }
     }
     
     void OnTriggerExit(Collider other)
@@ -94,10 +105,10 @@ public class Pedestal : MonoBehaviour
     {
         currentObject = obj;
         
-        // Désactiver temporairement le grab
-        XRGrabInteractable grab = obj.GetComponent<XRGrabInteractable>();
-        if (grab != null)
-            grab.enabled = false;
+        // Désactiver temporairement le grab (très court)
+        // XRGrabInteractable grab = obj.GetComponent<XRGrabInteractable>();
+        // if (grab != null)
+        //     grab.enabled = false;
         
         // Geler la physique
         Rigidbody rb = obj.GetComponent<Rigidbody>();
@@ -108,29 +119,12 @@ public class Pedestal : MonoBehaviour
             rb.isKinematic = true;
         }
         
-        // Animation de snap
-        Vector3 startPos = obj.transform.position;
-        Quaternion startRot = obj.transform.rotation;
-        float elapsed = 0;
+        // Snap instantané
+        obj.transform.position = snapPoint.position;
+        obj.transform.rotation = snapPoint.rotation;
         
         if (audioSource && snapSound)
             audioSource.PlayOneShot(snapSound);
-        
-        while (elapsed < 1f / snapSpeed)
-        {
-            float t = elapsed * snapSpeed;
-            t = Mathf.SmoothStep(0, 1, t);
-            
-            obj.transform.position = Vector3.Lerp(startPos, snapPoint.position, t);
-            obj.transform.rotation = Quaternion.Slerp(startRot, snapPoint.rotation, t);
-            
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        
-        // Position finale
-        obj.transform.position = snapPoint.position;
-        obj.transform.rotation = snapPoint.rotation;
         
         // Vérifier si c'est le bon objet
         IsCorrect = (obj == correctObject);
@@ -149,9 +143,15 @@ public class Pedestal : MonoBehaviour
             Debug.Log("❌ MAUVAIS objet placé!");
         }
         
-        // Réactiver le grab
-        if (grab != null)
-            grab.enabled = true;
+        // Attendre un frame pour éviter les conflits
+        yield return null;
+        
+        // Réactiver le grab ET la physique pour pouvoir reprendre l'objet
+        // if (grab != null)
+        //     grab.enabled = true;
+            
+        if (rb != null)
+            rb.isKinematic = false;
     }
     
     private void RemoveObject()
@@ -180,51 +180,5 @@ public class Pedestal : MonoBehaviour
             Gizmos.color = IsCorrect ? Color.green : (currentObject ? Color.red : Color.yellow);
             Gizmos.DrawWireSphere(snapPoint.position, 0.1f);
         }
-    }
-}
-
-// Version encore plus simple du manager
-public class SimplePedestalManager : MonoBehaviour
-{
-    [SerializeField] private Pedestal[] pedestals;
-    [SerializeField] private GameObject objectToActivate;
-    
-    [Header("Pour l'échelle")]
-    [SerializeField] private Animator ladderAnimator;
-    [SerializeField] private string triggerName = "Fall";
-    
-    private bool puzzleCompleted = false;
-    
-    void Update()
-    {
-        if (!puzzleCompleted)
-        {
-            bool allCorrect = true;
-            foreach (var pedestal in pedestals)
-            {
-                if (!pedestal.IsCorrect)
-                {
-                    allCorrect = false;
-                    break;
-                }
-            }
-            
-            if (allCorrect)
-            {
-                puzzleCompleted = true;
-                OnPuzzleCompleted();
-            }
-        }
-    }
-    
-    void OnPuzzleCompleted()
-    {
-        Debug.Log("🎉 Puzzle résolu!");
-        
-        if (objectToActivate != null)
-            objectToActivate.SetActive(true);
-            
-        if (ladderAnimator != null)
-            ladderAnimator.SetTrigger(triggerName);
     }
 }
