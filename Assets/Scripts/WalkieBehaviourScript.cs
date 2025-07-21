@@ -36,13 +36,13 @@ public class WalkieBehaviour : MonoBehaviour
         // Positionner le talkie à sa position de snap au démarrage
         if (snapOnStart && snapAnchor != null)
         {
+            audioSource.Stop();
             StartCoroutine(InitialSnap());
         }
     }
 
     IEnumerator InitialSnap()
     {
-        // Petit délai pour s'assurer que tous les objets sont initialisés
         yield return new WaitForSeconds(startDelay);
         
         if (debugMode)
@@ -104,8 +104,11 @@ public class WalkieBehaviour : MonoBehaviour
     void OnGrab(SelectEnterEventArgs args)
     {
         if (audioSource && grabSound)
+        {
+            audioSource.Stop();
             audioSource.PlayOneShot(grabSound);
-            
+        }
+
         StopAllCoroutines();
         transform.SetParent(null);
         
@@ -118,8 +121,11 @@ public class WalkieBehaviour : MonoBehaviour
     void OnRelease(SelectExitEventArgs args)
     {
         if (audioSource && releaseSound)
+        {
+            audioSource.Stop();
             audioSource.PlayOneShot(releaseSound);
-            
+        }
+
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
         
