@@ -1,49 +1,55 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class WalkieBehaviour : MonoBehaviour
 {
     [Header("Setup")]
     public Transform snapAnchor;
     public AudioSource audioSource;
-    public AudioClip grabSound, releaseSound;
+    public AudioClip grabSound;
+    public AudioClip releaseSound;
     public float snapSpeed = 5f;
 
-    XRGrabInteractable grab;
+    private XRGrabInteractable grabInteractable;
+    private Rigidbody rb;
 
-    void Awake()
+    private void Awake()
     {
-        grab = GetComponent<XRGrabInteractable>();
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        rb = GetComponent<Rigidbody>();
 
-        grab.selectEntered.AddListener(OnGrab);
-        grab.selectExited.AddListener(OnRelease);
+        grabInteractable.selectEntered.AddListener(OnGrab);
+        grabInteractable.selectExited.AddListener(OnRelease);
     }
 
-    void OnGrab(SelectEnterEventArgs args)
+    private void OnGrab(SelectEnterEventArgs args)
     {
         audioSource.PlayOneShot(grabSound);
+        Haptic(args.interactorObject);
         StopAllCoroutines();
         transform.SetParent(null);
-        GetComponent<Rigidbody>().isKinematic = false;
+        rb.isKinematic = false;
     }
 
-    void OnRelease(SelectExitEventArgs args)
+    private void OnRelease(SelectExitEventArgs args)
     {
         audioSource.PlayOneShot(releaseSound);
-        GetComponent<Rigidbody>().isKinematic = true;
+        Haptic(args.interactorObject);
+        rb.isKinematic = true;
         StartCoroutine(SnapBack());
     }
 
-    IEnumerator SnapBack()
+    private IEnumerator SnapBack()
     {
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
         Vector3 endPos = snapAnchor.position;
         Quaternion endRot = snapAnchor.rotation;
 
-        float t = 0;
+        float t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime * snapSpeed;
@@ -55,5 +61,14 @@ public class WalkieBehaviour : MonoBehaviour
         transform.SetParent(snapAnchor);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+    }
+
+    private void Haptic(IXRSelectInteractor interactor)
+    {
+        var controllerInteractor = interactor as XRBaseControllerInteractor;
+        if (controllerInteractor != null && controllerInteractor.xrController != null)
+        {
+            controllerInteractor.xrController.SendHapticImpulse(0.5f, 0.1f);
+        }
     }
 }
