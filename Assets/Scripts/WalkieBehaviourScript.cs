@@ -12,6 +12,10 @@ public class WalkieBehaviour : MonoBehaviour
     public AudioClip grabSound;
     public AudioClip releaseSound;
     public float snapSpeed = 5f;
+    
+    [Header("Initial Position")]
+    [SerializeField] private bool snapOnStart = true;
+    [SerializeField] private float startDelay = 0.1f; // Petit délai pour s'assurer que tout est initialisé
 
     private XRGrabInteractable grabInteractable;
     private Rigidbody rb;
@@ -44,6 +48,12 @@ public class WalkieBehaviour : MonoBehaviour
 
     private IEnumerator SnapBack()
     {
+        if (snapAnchor == null)
+        {
+            Debug.LogWarning("Snap Anchor is not assigned!");
+            yield break;
+        }
+        
         Vector3 startPos = transform.position;
         Quaternion startRot = transform.rotation;
         Vector3 endPos = snapAnchor.position;
@@ -58,9 +68,14 @@ public class WalkieBehaviour : MonoBehaviour
             yield return null;
         }
 
+        // S'assurer que la position finale est exacte
+        transform.position = snapAnchor.position;
+        transform.rotation = snapAnchor.rotation;
         transform.SetParent(snapAnchor);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+        
+        isSnapped = true;
     }
 
     private void Haptic(IXRSelectInteractor interactor)
