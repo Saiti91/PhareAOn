@@ -250,15 +250,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1118899587911054004, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.181
+      value: 0.1283
       objectReference: {fileID: 0}
     - target: {fileID: 1118899587911054004, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.623
+      value: 1.334
       objectReference: {fileID: 0}
     - target: {fileID: 1118899587911054004, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.037
+      value: 0.1124
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503725, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_Name
@@ -617,8 +617,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127464782}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.269, y: 1.303, z: 0.0181}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1283, y: 1.334, z: 0.1124}
   m_LocalScale: {x: 0.029036, y: 0.05, z: 0.0194885}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -795,6 +795,8 @@ MonoBehaviour:
   grabSound: {fileID: 8300000, guid: 79e23e4423c0e6042abc717965d177bf, type: 3}
   releaseSound: {fileID: 8300000, guid: 8b8e24a99d209aa4b85e615809a4ccbd, type: 3}
   snapSpeed: 5
+  snapOnStart: 1
+  startDelay: 0.1
 --- !u!1 &1249617917
 GameObject:
   m_ObjectHideFlags: 0
@@ -1123,7 +1125,7 @@ Transform:
   m_GameObject: {fileID: 1577174752}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2598, y: 1.3432, z: 0.0181}
+  m_LocalPosition: {x: 0.1283, y: 1.334, z: 0.1124}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
