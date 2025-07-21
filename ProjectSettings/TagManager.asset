@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Anchor
   - PotTrigger
+  - Good
+  - NotGood
   layers:
   - Default
   - TransparentFX

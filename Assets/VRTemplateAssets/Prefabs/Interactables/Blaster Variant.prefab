@@ -61,6 +61,10 @@ PrefabInstance:
       value: Blaster Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7248925196756646567, guid: 3549fdaf258e11846b85a316c16c699c, type: 3}
+      propertyPath: m_Mass
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7248925196756646567, guid: 3549fdaf258e11846b85a316c16c699c, type: 3}
       propertyPath: m_UseGravity
       value: 1
       objectReference: {fileID: 0}
