@@ -39,7 +39,7 @@ public class EscapeManager : MonoBehaviour
 
     void TriggerFallAnimation()
     {
-        if (currentError >= 4)
+        if (currentError >= 3)
         {
             Debug.Log("Game over !");
             return;
