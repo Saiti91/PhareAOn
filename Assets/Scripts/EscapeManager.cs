@@ -31,7 +31,7 @@ public class EscapeManager : MonoBehaviour
     {
         for (int i = 0; i < currentSequence.Count; i++)
         {
-            if (currentSequence[i] != correctSequence[i])
+            if (currentSequence[i] == correctSequence[i])
                 return false;
         }
         return true;
