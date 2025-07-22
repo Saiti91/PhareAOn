@@ -12,7 +12,7 @@ public class PedestalManager : MonoBehaviour
     
     [Header("Animator Trigger")]
     [SerializeField] private GameObject ladderFallObject; // L'objet LadderFall
-    [SerializeField] private string triggerName = "Fall"; // Nom du trigger dans l'Animator
+    [SerializeField] private string triggerName = "LadderFall"; // Nom du trigger dans l'Animator
     [SerializeField] private Animator ladderAnimator; // Référence directe à l'Animator (optionnel)
     
     [Header("Événements")]
