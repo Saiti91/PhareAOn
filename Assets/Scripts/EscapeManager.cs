@@ -39,14 +39,31 @@ public class EscapeManager : MonoBehaviour
 
     void TriggerFallAnimation()
     {
-        if (currentError >= 3)
+        Debug.Log("Déclenchement animation : fall_" + (currentError + 1));
+
+        if (currentError > 3)
         {
             Debug.Log("Game over !");
             return;
         }
 
-        ceilingAnimator.SetTrigger("fall_" + (currentError + 1));
+        switch(currentError)
+        {
+            case 1:
+                ceilingAnimator.SetTrigger("fall_1");
+                break;
+            case 2:
+                ceilingAnimator.SetTrigger("fall_2");
+                break;
+            case 3:
+                ceilingAnimator.SetTrigger("fall_3");
+                break;
+            default:
+                break;
+        }
+
         currentError++;
+        waiting = 0;
     }
 
     void OpenDoor()
