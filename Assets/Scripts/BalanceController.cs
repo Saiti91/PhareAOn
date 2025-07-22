@@ -302,6 +302,7 @@ public class BalanceController : MonoBehaviour
     // Visualisation dans l'éditeur
     void OnDrawGizmos()
     {
+        #if UNITY_EDITOR
         if (!beam) return;
         
         // Couleur selon l'état
@@ -323,5 +324,6 @@ public class BalanceController : MonoBehaviour
             UnityEditor.Handles.Label(leftPlate.position + Vector3.up * 0.5f, $"{currentPotWeight:F1}kg");
             UnityEditor.Handles.Label(rightPlate.position + Vector3.up * 0.5f, $"{fixedWeight:F1}kg");
         }
+        #endif
     }
 }
